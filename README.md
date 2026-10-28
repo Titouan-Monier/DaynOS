@@ -60,22 +60,15 @@ Le projet compile via une chaîne d'outils croisée (*cross-compiler*) isolée d
 
 ## Compilation et Exécution
 
-Exécuter les commandes suivantes à la racine du dépôt :
+Le cycle de build est automatisé via GNU Make :
 
 ```bash
-# 1. Assemblage du bootloader
-nasm -f elf32 boot.asm -o boot.o
+# Compiler le noyau et lancer l'émulateur QEMU
+make run
 
-# 2. Compilation du noyau C
-x86_64-elf-gcc -m32 -c kernel.c -o kernel.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra
-
-# 3. Édition de liens (Génération du binaire final)
-x86_64-elf-gcc -m32 -Wl,-m,elf_i386 -T linker.ld -o DaynOS.bin -ffreestanding -O2 -nostdlib boot.o kernel.o
-
-# 4. Lancement dans l'émulateur
-qemu-system-x86_64 -kernel DaynOS.bin
+# Nettoyer les artefacts de compilation (*.o, *.bin)
+make clean
 ```
-
 ---
 
 ## Feuille de Route (Roadmap)
@@ -88,7 +81,7 @@ qemu-system-x86_64 -kernel DaynOS.bin
 - [x] Affichage d'un logo ASCII dans le buffer vidéo matériel (`0xB8000`)
 
 ### Phase 2 : Automatisation et Architecture Noyau (À faire)
-- [ ] Création d'un `Makefile` pour automatiser le cycle de build et de nettoyage
+- [x] Création d'un `Makefile` pour automatiser le cycle de build et de nettoyage
 - [ ] Création d'une image disque amorçable (`.iso`) avec GRUB (`grub-mkrescue`)
 - [ ] Implémentation de la GDT (*Global Descriptor Table*) pour segmenter la mémoire
 - [ ] Mise en place de l'IDT (*Interrupt Descriptor Table*) pour gérer les interruptions matérielles
