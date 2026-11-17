@@ -18,6 +18,7 @@ stack_top:
 
 section .text
 global _start
+global gdt_flush
 extern kernel_main
 
 _start:
@@ -27,3 +28,19 @@ _start:
 .hang:
     hlt
     jmp .hang
+
+; Charge la nouvelle GDT et actualise les registres de segments du CPU
+gdt_flush:
+    mov eax, [esp + 4]  ; Récupère l'adresse de gdt_ptr passée en argument
+    lgdt [eax]          ; Charge le registre matériel GDTR
+
+    mov ax, 0x10        ; 0x10 = Offset du segment Données Noyau
+    mov ds, ax
+    mov es, ax
+    mov fs, ax
+    mov gs, ax
+    mov ss, ax
+
+    jmp 0x08:.flush     ; Saut long vers l'offset 0x08 (Code Noyau) pour recharger CS
+.flush:
+    ret
