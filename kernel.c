@@ -1,9 +1,10 @@
 #include "gdt.h"
+#include "idt.h"
 
 void kernel_main(void)
 {
-    // Initialisation de la segmentation mémoire (GDT)
     init_gdt();
+    init_idt();
 
     const char *logo[] = {
         "  ___                   ___  ___ ",
@@ -11,7 +12,8 @@ void kernel_main(void)
         " | |) / _` | || | ' \\ | (_) \\__ \\",
         " |___/\\__,_|\\_, |_||_| \\___/|___/",
         "            |__/                 "};
-    const char *status = "[OK] GDT initialisee (Flat Memory Model - Ring 0/3)";
+    const char *gdt_status = "[OK] GDT initialisee (Flat Memory Model - Ring 0/3)";
+    const char *idt_status = "[OK] IDT initialisee (256 portes - Exceptions ISR 0-31)";
 
     unsigned short *video_memory = (unsigned short *)0xB8000;
     int line_width = 80;
@@ -29,9 +31,16 @@ void kernel_main(void)
         }
     }
 
-    // Afficher la validation GDT en vert clair (0x0A) sur la ligne 7
-    for (int col = 0; status[col] != '\0'; col++)
+    // Afficher la validation GDT (Ligne 7) et IDT (Ligne 8) en vert clair (0x0A)
+    for (int col = 0; gdt_status[col] != '\0'; col++)
     {
-        video_memory[7 * line_width + col] = (unsigned short)status[col] | (0x0A << 8);
+        video_memory[7 * line_width + col] = (unsigned short)gdt_status[col] | (0x0A << 8);
     }
+    for (int col = 0; idt_status[col] != '\0'; col++)
+    {
+        video_memory[8 * line_width + col] = (unsigned short)idt_status[col] | (0x0A << 8);
+    }
+
+    // Déclencher une interruption de test (Vecteur 3 : Breakpoint)
+    __asm__ volatile("int $0x03");
 }

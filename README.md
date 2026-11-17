@@ -82,8 +82,8 @@ make clean
 
 ### Phase 2 : Automatisation et Architecture Noyau (À faire)
 - [x] Création d'un `Makefile` pour automatiser le cycle de build et de nettoyage
-- [ ] Création d'une image disque amorçable (`.iso`) avec GRUB (`grub-mkrescue`)
-- [ ] Implémentation de la GDT (*Global Descriptor Table*) pour segmenter la mémoire
-- [ ] Mise en place de l'IDT (*Interrupt Descriptor Table*) pour gérer les interruptions matérielles
+- [x] Création d'une image disque amorçable (`.iso`) avec GRUB (`grub-mkrescue`)
+- [x] Implémentation de la GDT (*Global Descriptor Table*) pour segmenter la mémoire
+- [x] Mise en place de l'IDT (*Interrupt Descriptor Table*) pour gérer les interruptions matérielles
 - [ ] Développement d'un pilote clavier PS/2 (lecture des ports I/O `0x60` et `0x64`)
 - [ ] Passage du mode texte VGA au mode graphique VESA (*Framebuffer*) pour le rendu par pixels
