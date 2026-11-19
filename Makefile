@@ -10,7 +10,7 @@ CFLAGS = -m32 -march=i686 -mno-sse -mno-sse2 -mno-mmx -mno-80387 -std=gnu99 -ffr
 LDFLAGS  = -m32 -Wl,-m,elf_i386 -T linker.ld -ffreestanding -O2 -nostdlib
 
 # Fichiers et dossiers cibles
-OBJS   = boot.o kernel.o gdt.o idt.o
+OBJS   = boot.o kernel.o gdt.o idt.o keyboard.o
 TARGET = DaynOS.bin
 ISO    = DaynOS.iso
 ISODIR = isodir
@@ -36,7 +36,7 @@ boot.o: boot.asm
 	$(CC) $(CFLAGS) -c $< -o $@
 
 run: $(ISO)
-	$(EMU) -cdrom $(ISO)
+	$(EMU) -cdrom $(ISO) -display gtk,grab-on-hover=on
 
 clean:
 	rm -rf $(OBJS) $(TARGET) $(ISO) $(ISODIR)
